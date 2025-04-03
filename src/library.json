@@ -1,0 +1,24 @@
+{
+    "data": [
+      {
+        "sampleName": "kick", 
+        "secuence": [1, 0, 1, 0, 0,0, 1, 0]
+      },
+      {
+        "sampleName": "clap", 
+        "secuence": [1, 0, 1, 0, 0,0, 1, 0]
+      },
+      {
+        "sampleName": "hihat", 
+        "secuence": [0, 0, 1, 0, 0, 0, 1, 0]
+      },
+      {
+        "sampleName": "shake", 
+        "secuence": [1, 0, 1, 0, 1, 0, 1, 0]
+      },
+      {
+        "sampleName": "tom_low", 
+        "secuence": [0, 0, 1, 0, 0, 0, 0, 0]
+      }  
+    ] 
+}
