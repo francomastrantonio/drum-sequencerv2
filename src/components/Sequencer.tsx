@@ -5,8 +5,13 @@ import { useAudioSequencer } from "@/contexts/AudioSequencerContext";
 import BpmInput from "./BpmInput";
 
 export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData}) =>{
-    const { startSeq, resetSeq, pauseSeq, isRunningSeq } = useAudioSequencer()
+    const { startSeq, resetSeq, pauseSeq, isRunningSeq, indexSeq } = useAudioSequencer()
     const [bpm, setBpm] = useState(120)
+    let arraySteps = new Array(steps)
+    for(let i=0 ; i < arraySteps.length ; i++){
+        arraySteps[i] = i+1
+    }
+
     return (
     <div className="flex-col bg-gray-300 p-4 rounded-lg">
         <div id='controller' className="flex flex-row items-center">
@@ -16,13 +21,20 @@ export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData}) =>{
                 Stop
             </button>
             <BpmInput onChange={(value) => setBpm(value)} />
+            <span className="text-black text-xl ml-4">Cantidad de steps: {steps}</span>
         </div>
         <div>
+            <div className="flex flex-row ml-[84px]">
             {
-                Array(steps).map((step)=>{
-                    return <span>hola{step}</span>
+                arraySteps.map((step, key)=>{
+                    return (
+                        <div key={key} className="h-[50px] w-[50px] flex items-center justify-center mr-2">
+                            <span className={`font-bold text-xl ${indexSeq +1 === step ? 'text-amber-600' : 'text-black'}`}>{step}</span>
+                        </div>
+                        )
                 })
             }
+            </div>
             {
                 samplesData.map((sample)=>{
                     return(
