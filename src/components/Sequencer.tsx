@@ -17,14 +17,20 @@ export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData}) =>{
             </button>
             <BpmInput onChange={(value) => setBpm(value)} />
         </div>
-        
-        {
-            samplesData.map((sample)=>{
-                return(
-                    <SequencerChannel key={sample.sampleName} steps={steps} sampleInfo={sample} />
-                )
-            })
-        }
+        <div>
+            {
+                Array(steps).map((step)=>{
+                    return <span>hola{step}</span>
+                })
+            }
+            {
+                samplesData.map((sample)=>{
+                    return(
+                        <SequencerChannel key={sample.sampleName} steps={steps} sampleInfo={sample} />
+                    )
+                })
+            }
+        </div>
     </div>   
     )
 }
@@ -32,6 +38,14 @@ export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData}) =>{
 const SequencerChannel = (props: any) => {
     const { indexSeq } = useAudioSequencer()
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    //const [secuenceSteps, setSecuenceSteps] = useState(null)
+    function repetirArray(arr: Array<number>, n: number) {
+        return [].concat(...Array(n).fill(arr));
+    }
+      
+    const miArray = props.sampleInfo.secuence;
+    const veces = props.steps / props.sampleInfo.secuence.length;
+    
 
     const handlePlay = () => {
       if (audioRef.current) {
@@ -40,13 +54,31 @@ const SequencerChannel = (props: any) => {
       }
     }
 
+    useEffect(()=>{
+        console.log("[Sequencer.tsx].useEffect=",props.sampleInfo.secuence.length)
+        console.log("ArrayRepe",repetirArray(miArray, veces));
+        if(props.sampleInfo.secuence.length < props.steps){
+            console.log("[Sequencer.tsx].useEffect la secuencia es MENOR que los steps")
+            //var arrayAux = secuenceSteps
+            /*
+            for(let i = props.sampleInfo.secuence.length ; props.sampleInfo.secuence.length < props.steps ; i++){
+                console.log("index.i=", i)
+                console.log("index.arrayAux=", i)
+            }
+                */
+        }else{
+            console.log("[Sequencer.tsx].useEffect la secuencia es MAYOR que los steps")
+            //setSecuenceSteps(props.sampleInfo.secuence)
+        }
+    }, [])
+
     return (
         <div className="flex flex-row mb-4">
             <audio ref={audioRef} src={`/samples/${props.sampleInfo.sampleName}.wav`} />
             <div className="flex flex-row items-center">
                 <span className="mr-4 text-black w-[70px]">{props.sampleInfo.sampleName}</span>
                 {
-                    props.sampleInfo.secuence.map((step: boolean, index: number) => {
+                    repetirArray(miArray, veces).map((step: boolean, index: number) => {
                         return <StepSequencer index={index} key={`${props.sampleInfo.sampleName}-step${index}`} pressed={step} actualStep={index === indexSeq} handlePlay={handlePlay} />
                     })
                 }
