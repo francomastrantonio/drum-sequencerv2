@@ -8,7 +8,7 @@ export type SecuencerProps = {
 
 export type SampleData = {
     sampleName: string,
-    secuence?: Array<boolean>
+    secuence?: Array<boolean> | Array<number> 
 }
 
 export type SequencerInputProps = {
