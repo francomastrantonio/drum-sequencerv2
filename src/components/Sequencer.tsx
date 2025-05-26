@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState } from "react"
 import { SecuencerProps } from "@/types";
 import { useAudioSequencer } from "@/contexts/AudioSequencerContext";
-import BpmInput from "./BpmInput";
+import { SequencerInput } from "./SequencerInput";
 
-export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData}) =>{
+export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData, setSteps}) =>{
     const { startSeq, resetSeq, pauseSeq, isRunningSeq, indexSeq } = useAudioSequencer()
     const [bpm, setBpm] = useState(120)
     let arraySteps = new Array(steps)
@@ -20,8 +20,16 @@ export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData}) =>{
             <button className="bg-slate-500 p-2 rounded-lg my-4 mr-4" onClick={()=>resetSeq()}>
                 Stop
             </button>
-            <BpmInput onChange={(value) => setBpm(value)} />
-            <span className="text-black text-xl ml-4">Cantidad de steps: {steps}</span>
+            <div className="flex flex-row gap-4">
+                <SequencerInput 
+                    inputType="BPM" 
+                    onChange={(value: number) => setBpm(value)} 
+                    inputParams={{ defaultValue: 120, minValue: 0, maxValue: 999}}/>
+                <SequencerInput 
+                    inputType="Steps"
+                    onChange={setSteps} 
+                    inputParams={{ defaultValue: 8, minValue: 8, maxValue: 64}}/>
+            </div>
         </div>
         <div>
             <div className="flex flex-row ml-[84px]">
@@ -50,7 +58,6 @@ export const Sequencer: React.FC<SecuencerProps> = ({ steps, samplesData}) =>{
 const SequencerChannel = (props: any) => {
     const { indexSeq } = useAudioSequencer()
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    //const [secuenceSteps, setSecuenceSteps] = useState(null)
     function repetirArray(arr: Array<number>, n: number) {
         return [].concat(...Array(n).fill(arr));
     }
@@ -58,31 +65,12 @@ const SequencerChannel = (props: any) => {
     const miArray = props.sampleInfo.secuence;
     const veces = props.steps / props.sampleInfo.secuence.length;
     
-
     const handlePlay = () => {
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         audioRef.current.play();
       }
     }
-
-    useEffect(()=>{
-        console.log("[Sequencer.tsx].useEffect=",props.sampleInfo.secuence.length)
-        console.log("ArrayRepe",repetirArray(miArray, veces));
-        if(props.sampleInfo.secuence.length < props.steps){
-            console.log("[Sequencer.tsx].useEffect la secuencia es MENOR que los steps")
-            //var arrayAux = secuenceSteps
-            /*
-            for(let i = props.sampleInfo.secuence.length ; props.sampleInfo.secuence.length < props.steps ; i++){
-                console.log("index.i=", i)
-                console.log("index.arrayAux=", i)
-            }
-                */
-        }else{
-            console.log("[Sequencer.tsx].useEffect la secuencia es MAYOR que los steps")
-            //setSecuenceSteps(props.sampleInfo.secuence)
-        }
-    }, [])
 
     return (
         <div className="flex flex-row mb-4">

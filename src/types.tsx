@@ -1,9 +1,24 @@
+import { Dispatch, SetStateAction } from "react"
+
 export type SecuencerProps = {
-    steps: number;
-    samplesData: Array<SampleData>;
+    steps: number,
+    samplesData: Array<SampleData>,
+    setSteps: Dispatch<SetStateAction<number>>
 }
 
 export type SampleData = {
     sampleName: string,
     secuence?: Array<boolean>
+}
+
+export type SequencerInputProps = {
+    onChange: Function,
+    inputType: string,
+    inputParams: InputParams
+}
+
+export type InputParams = {
+    defaultValue: number,
+    minValue: number,
+    maxValue: number
 }
